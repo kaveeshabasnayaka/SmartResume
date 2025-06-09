@@ -41,7 +41,7 @@ const styles = {
   return (
     <div style={styles.container}>
       <h2 style={styles.heading}>Select a Template</h2>
-      {[1, 2, 3].map((id) => (
+      {[1, 2, 3,4,5].map((id) => (
         <button
           key={id}
           style={styles.button}
@@ -51,6 +51,7 @@ const styles = {
         >
           Template {id}
         </button>
+       
       ))}
     </div>
   );

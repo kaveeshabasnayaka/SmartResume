@@ -9,15 +9,15 @@ function TemplatePreview() {
   const handlePrint = () => {
     const content = contentRef.current.innerHTML;
     const printWindow = window.open('', '', 'height=600,width=800');
-
     printWindow.document.write(`
       <html>
         <head>
           <title>${formData?.fullName || 'Resume'}</title>
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; }
-            h2 { margin-bottom: 10px; }
+            h2 { color: #c2296b; margin-bottom: 10px; }
             p { margin: 5px 0; }
+            .section-title { font-weight: bold; color: #5b5b5b; margin-top: 15px; }
           </style>
         </head>
         <body>
@@ -25,10 +25,8 @@ function TemplatePreview() {
         </body>
       </html>
     `);
-
     printWindow.document.close();
     printWindow.focus();
-
     printWindow.onload = () => {
       printWindow.print();
       printWindow.close();
@@ -52,53 +50,135 @@ function TemplatePreview() {
       fontSize: "2.5rem",
       marginBottom: "2rem",
     },
-    previewBox: {
+    box: {
       backgroundColor: "#1a1a1a",
-      padding: "2rem",
       border: "2px solid #5b5b5b",
       borderRadius: "12px",
-      width: "100%",
-      maxWidth: "700px",
+      padding: "2rem",
       marginBottom: "2rem",
-    },
-    sectionTitle: {
-      color: "#c2296b",
-      marginTop: "1rem",
-      marginBottom: "0.5rem",
+      width: "100%",
+      maxWidth: "800px",
     },
     button: {
       backgroundColor: "#c2296b",
-      color: "#ffffff",
+      color: "#fff",
       padding: "0.75rem 2rem",
       border: "none",
       borderRadius: "10px",
       fontWeight: "bold",
       fontSize: "1rem",
       cursor: "pointer",
-      transition: "background-color 0.3s ease",
     },
+  };
+
+  const TemplateOne = () => (
+    <div style={{ display: "flex", gap: "2rem" }}>
+      <div style={{ flex: 1 }}>
+        <h2>{formData.fullName}</h2>
+        <p><strong>Email:</strong> {formData.email}</p>
+        <p><strong>Phone:</strong> {formData.phone}</p>
+        <p className="section-title">Skills</p>
+        <p>{formData.skills}</p>
+      </div>
+      <div style={{ flex: 2 }}>
+        <p className="section-title">Education</p>
+        <p>{formData.education}</p>
+        <p className="section-title">Experience</p>
+        <p>{formData.experience}</p>
+      </div>
+    </div>
+  );
+
+  const TemplateTwo = () => (
+    <div style={{ textAlign: "center" }}>
+      <h2>{formData.fullName}</h2>
+      <p>{formData.email} | {formData.phone}</p>
+      <hr style={{ borderColor: "#5b5b5b", margin: "1rem 0" }} />
+      <p className="section-title">Education</p>
+      <p>{formData.education}</p>
+      <p className="section-title">Experience</p>
+      <p>{formData.experience}</p>
+      <p className="section-title">Skills</p>
+      <p>{formData.skills}</p>
+    </div>
+  );
+
+  const TemplateThree = () => (
+    <div>
+      <h2 style={{ marginBottom: "0.5rem" }}>{formData.fullName}</h2>
+      <p>{formData.email} | {formData.phone}</p>
+      <div style={{ marginTop: "1.5rem" }}>
+        <p className="section-title">Education</p>
+        <p>{formData.education}</p>
+        <p className="section-title">Experience</p>
+        <p>{formData.experience}</p>
+        <p className="section-title">Skills</p>
+        <p>{formData.skills}</p>
+      </div>
+    </div>
+  );
+
+  const TemplateFour = () => (
+    <div>
+      <div style={{
+        backgroundColor: "#c2296b",
+        color: "#fff",
+        padding: "1rem 2rem",
+        borderRadius: "8px 8px 0 0",
+        marginBottom: "1.5rem"
+      }}>
+        <h2 style={{ margin: 0 }}>{formData.fullName}</h2>
+        <p>{formData.email} | {formData.phone}</p>
+      </div>
+      <div>
+        <p className="section-title">Education</p>
+        <p>{formData.education}</p>
+        <p className="section-title">Experience</p>
+        <p>{formData.experience}</p>
+        <p className="section-title">Skills</p>
+        <p>{formData.skills}</p>
+      </div>
+    </div>
+  );
+
+  const TemplateFive = () => (
+    <div>
+      <h2 style={{ borderBottom: "2px solid #5b5b5b", paddingBottom: "0.5rem" }}>{formData.fullName}</h2>
+      <p style={{ margin: "0.5rem 0" }}>{formData.email} | {formData.phone}</p>
+      <div style={{ marginTop: "1.5rem" }}>
+        <div style={{ marginBottom: "1rem" }}>
+          <p className="section-title">🎓 Education</p>
+          <p>{formData.education}</p>
+        </div>
+        <div style={{ marginBottom: "1rem" }}>
+          <p className="section-title">💼 Experience</p>
+          <p>{formData.experience}</p>
+        </div>
+        <div style={{ marginBottom: "1rem" }}>
+          <p className="section-title">🛠 Skills</p>
+          <p>{formData.skills}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderTemplate = () => {
+    switch (templateId) {
+      case "1": return <TemplateOne />;
+      case "2": return <TemplateTwo />;
+      case "3": return <TemplateThree />;
+      case "4": return <TemplateFour />;
+      case "5": return <TemplateFive />;
+      default: return <TemplateOne />;
+    }
   };
 
   return (
     <div style={styles.page}>
       <h1 style={styles.title}>Preview (Template {templateId})</h1>
-
-
-      <div
-        ref={contentRef}
-        style={styles.previewBox}
-      >
-        <h2>{formData.fullName}</h2>
-        <p><strong>Email:</strong> {formData.email}</p>
-        <p><strong>Phone:</strong> {formData.phone}</p>
-        <h3 style={styles.sectionTitle}>Education</h3>
-        <p>{formData.education}</p>
-        <h3 style={styles.sectionTitle}>Experience</h3>
-        <p>{formData.experience}</p>
-        <h3 style={styles.sectionTitle}>Skills</h3>
-        <p>{formData.skills}</p>
+      <div ref={contentRef} style={styles.box}>
+        {renderTemplate()}
       </div>
-
       <button
         style={styles.button}
         onMouseOver={(e) => (e.target.style.backgroundColor = "#a51e57")}
