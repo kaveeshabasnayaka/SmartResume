@@ -1,36 +1,29 @@
+
 import React, { useRef } from "react";
 import { useLocation } from "react-router-dom";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
 
 function TemplatePreview() {
   const location = useLocation();
   const { formData, templateId } = location.state || {};
   const contentRef = useRef();
 
-  const handlePrint = () => {
-    const content = contentRef.current.innerHTML;
-    const printWindow = window.open('', '', 'height=600,width=800');
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>${formData?.fullName || 'Resume'}</title>
-          <style>
-            body { font-family: Arial, sans-serif; padding: 20px; }
-            h2 { color: #c2296b; margin-bottom: 10px; }
-            p { margin: 5px 0; }
-            .section-title { font-weight: bold; color: #5b5b5b; margin-top: 15px; }
-          </style>
-        </head>
-        <body>
-          ${content}
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.onload = () => {
-      printWindow.print();
-      printWindow.close();
-    };
+  const handleDownloadPDF = async () => {
+    const input = contentRef.current;
+
+    const canvas = await html2canvas(input, { scale: 2 });
+
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save(`${formData?.fullName || "resume"}.pdf`);
   };
 
   if (!formData) return <p>No form data found.</p>;
@@ -183,7 +176,7 @@ function TemplatePreview() {
         style={styles.button}
         onMouseOver={(e) => (e.target.style.backgroundColor = "#a51e57")}
         onMouseOut={(e) => (e.target.style.backgroundColor = "#c2296b")}
-        onClick={handlePrint}
+        onClick={handleDownloadPDF}
       >
         Download as PDF
       </button>
