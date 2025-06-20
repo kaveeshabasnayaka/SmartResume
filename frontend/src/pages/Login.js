@@ -13,11 +13,11 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await login(form); 
+      const response = await login(form);
       if (response.token) {
-        localStorage.setItem("token", response.token); 
+        localStorage.setItem("token", response.token);
         alert("Login successful");
-        navigate("/"); 
+        navigate("/");
       } else {
         alert("Invalid login");
       }
@@ -27,8 +27,8 @@ function Login() {
   };
 
   return (
-    <div style={{ padding: "2rem", textAlign: "center" }}>
-      <h2 style={{ color: "#c2296b" }}>Login</h2>
+    <div style={styles.container}>
+      <h2 style={styles.title}>Login</h2>
       <form onSubmit={handleLogin} style={{ display: "inline-block", textAlign: "left" }}>
         <input
           type="email"
@@ -46,8 +46,8 @@ function Login() {
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           style={inputStyle}
         />
-        <button type="submit" style={buttonStyle}>Login</button>
-        <p>Don't have an account? <a href="/register">Register</a></p>
+       <center><button type="submit" style={styles.button}>Login</button></center> 
+        <p style={{ color: "#FFFFFF" }}>Don't have an account? <a href="/register">Register</a></p>
       </form>
     </div>
   );
@@ -63,15 +63,34 @@ const inputStyle = {
   borderRadius: "8px",
 };
 
-const buttonStyle = {
-  backgroundColor: "#c2296b",
-  color: "#fff",
-  padding: "0.75rem 1.5rem",
-  fontSize: "1rem",
-  border: "none",
-  borderRadius: "8px",
-  cursor: "pointer",
-  marginBottom: "1rem",
-};
 
+const styles = {
+  container: {
+    backgroundColor: "#0d0d0d",
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    padding: "2rem",
+  },
+  title: {
+    fontSize: "3rem",
+    color: "#c2296b",
+    marginBottom: "2rem",
+  },
+  button: {
+    alignItems:"center",
+    backgroundColor: "#c2296b",
+    color: "#fff",
+    padding: "0.75rem 1.5rem",
+    fontSize: "1rem",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    marginBottom: "1rem",
+  },
+
+}
 export default Login;
