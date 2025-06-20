@@ -96,6 +96,7 @@ function TemplateForm() {
     <div style={styles.container}>
       <h2 style={styles.title}>Fill Resume Details (Template {id})</h2>
       <input
+      style={styles.input}
   type="file"
   accept="image/*"
  onChange={handleImageChange} />
