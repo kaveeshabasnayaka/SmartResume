@@ -33,10 +33,11 @@ function TemplateForm() {
   }
 };
 
-  const handlePreview = () => {
-    navigate("/preview", { state: { formData:{ ...formData, image: formData.image },
-      templateId: id } });
-  };
+ const handlePreview = () => {
+  localStorage.setItem("resumeForm", JSON.stringify({ ...formData, image: formData.image }));
+  localStorage.setItem("templateId", id);
+  navigate("/preview");
+};
 
   const styles = {
     container: {

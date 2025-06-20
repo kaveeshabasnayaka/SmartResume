@@ -14,7 +14,6 @@ function TestPrintPage() {
     <div>
       <h2>Print Test</h2>
 
-      {/* This must be a DOM element, not a component */}
       <div
         ref={componentRef}
         style={{
