@@ -13,6 +13,16 @@ function TemplatePreview() {
   const handleDownloadPDF = async () => {
     const input = contentRef.current;
 
+const images = input.querySelectorAll("img");
+  const loadPromises = Array.from(images).map(img => {
+    if (img.complete) return Promise.resolve();
+    return new Promise(resolve => {
+      img.onload = img.onerror = resolve;
+    });
+  });
+
+  await Promise.all(loadPromises);
+  
     const canvas = await html2canvas(input, { scale: 2 });
 
     const imgData = canvas.toDataURL("image/png");
@@ -27,6 +37,14 @@ function TemplatePreview() {
   };
 
   if (!formData) return <p>No form data found.</p>;
+const imageStyle = {
+  width: "120px",
+  height: "120px",
+  objectFit: "cover",
+  borderRadius: "50%",
+  border: "3px solid #c2296b",
+  marginBottom: "1rem",
+};
 
   const styles = {
     page: {
@@ -66,7 +84,8 @@ function TemplatePreview() {
 
   const TemplateOne = () => (
     <div style={{ display: "flex", gap: "2rem" }}>
-      <div style={{ flex: 1 }}>
+    <div style={{ flex: 1 }}>
+      {formData.image && <img src={formData.image} alt="Profile" style={imageStyle} />}
         <h2>{formData.fullName}</h2>
         <p><strong>Email:</strong> {formData.email}</p>
         <p><strong>Phone:</strong> {formData.phone}</p>
@@ -83,7 +102,8 @@ function TemplatePreview() {
   );
 
   const TemplateTwo = () => (
-    <div style={{ textAlign: "center" }}>
+   <div style={{ textAlign: "center" }}>
+    {formData.image && <img src={formData.image} alt="Profile" style={imageStyle} />}
       <h2>{formData.fullName}</h2>
       <p>{formData.email} | {formData.phone}</p>
       <hr style={{ borderColor: "#5b5b5b", margin: "1rem 0" }} />
@@ -97,9 +117,15 @@ function TemplatePreview() {
   );
 
   const TemplateThree = () => (
-    <div>
-      <h2 style={{ marginBottom: "0.5rem" }}>{formData.fullName}</h2>
-      <p>{formData.email} | {formData.phone}</p>
+   <div>
+    <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+      {formData.image && <img src={formData.image} alt="Profile" style={imageStyle} />}
+      <div>
+        <h2 style={{ marginBottom: "0.5rem" }}>{formData.fullName}</h2>
+        <p>{formData.email} | {formData.phone}</p>
+      </div>
+    </div>
+
       <div style={{ marginTop: "1.5rem" }}>
         <p className="section-title">Education</p>
         <p>{formData.education}</p>
@@ -113,16 +139,23 @@ function TemplatePreview() {
 
   const TemplateFour = () => (
     <div>
-      <div style={{
-        backgroundColor: "#c2296b",
-        color: "#fff",
-        padding: "1rem 2rem",
-        borderRadius: "8px 8px 0 0",
-        marginBottom: "1.5rem"
-      }}>
+    <div style={{
+      backgroundColor: "#c2296b",
+      color: "#fff",
+      padding: "1rem 2rem",
+      borderRadius: "8px 8px 0 0",
+      marginBottom: "1.5rem",
+      display: "flex",
+      alignItems: "center",
+      gap: "1.5rem"
+    }}>
+      {formData.image && <img src={formData.image} alt="Profile" style={imageStyle} />}
+      <div>
         <h2 style={{ margin: 0 }}>{formData.fullName}</h2>
         <p>{formData.email} | {formData.phone}</p>
+      </div>      
       </div>
+
       <div>
         <p className="section-title">Education</p>
         <p>{formData.education}</p>
@@ -136,6 +169,11 @@ function TemplatePreview() {
 
   const TemplateFive = () => (
     <div>
+     {formData.image && (
+      <div style={{ textAlign: "center" }}>
+        <img src={formData.image} alt="Profile" style={imageStyle} />
+      </div>
+    )}
       <h2 style={{ borderBottom: "2px solid #5b5b5b", paddingBottom: "0.5rem" }}>{formData.fullName}</h2>
       <p style={{ margin: "0.5rem 0" }}>{formData.email} | {formData.phone}</p>
       <div style={{ marginTop: "1.5rem" }}>
@@ -156,6 +194,16 @@ function TemplatePreview() {
   );
 
   const renderTemplate = () => {
+    {formData.image && (
+  <div style={{ marginBottom: "1rem" }}>
+    <img
+      src={formData.image}
+      alt="Profile"
+      style={{ width: "120px", height: "120px", objectFit: "cover", borderRadius: "50%" }}
+    />
+  </div>
+)}
+
     switch (templateId) {
       case "1": return <TemplateOne />;
       case "2": return <TemplateTwo />;

@@ -5,6 +5,7 @@ function TemplateForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+     profileImage: "", 
     fullName: "",
     email: "",
     phone: "",
@@ -20,8 +21,21 @@ function TemplateForm() {
     }));
   };
 
+
+  const handleImageChange = (e) => {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    setFormData(prev => ({ ...prev, image: reader.result }));
+  };
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+};
+
   const handlePreview = () => {
-    navigate("/preview", { state: { formData, templateId: id } });
+    navigate("/preview", { state: { formData:{ ...formData, image: formData.image },
+      templateId: id } });
   };
 
   const styles = {
@@ -80,6 +94,12 @@ function TemplateForm() {
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Fill Resume Details (Template {id})</h2>
+      <input
+  type="file"
+  accept="image/*"
+ onChange={handleImageChange} />
+
+
       <input
         style={styles.input}
         name="fullName"
